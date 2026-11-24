@@ -255,10 +255,15 @@ footer { padding: 28px 0 40px; border-top: 1px solid var(--line); color: var(--m
 // CAMBIA ESTOS DOS ENLACES por la dirección de tus archivos APK
 // (por ejemplo, el archivo junto a este index.html o un enlace de GitHub Releases)
 const APP_APK = 'https://github.com/Juanleonel03/Download-Metro-Bus-Digital-App/releases/tag/metro_bus_digital/Metro.Bus.Digital.apk';
+document.querySelectorAll('[data-apk="app"]').forEach(a => {
+  a.href = APP_APK;
+  a.removeAttribute('download');
+});
+
 //const TERMINAL_APK = 'metrodigital-terminal.apk';
 
-document.querySelectorAll('[data-apk="app"]').forEach(function (a) { a.href = APP_APK; });
-document.querySelectorAll('[data-apk="terminal"]').forEach(function (a) { a.href = TERMINAL_APK; });
+// document.querySelectorAll('[data-apk="app"]').forEach(function (a) { a.href = APP_APK; });
+// document.querySelectorAll('[data-apk="terminal"]').forEach(function (a) { a.href = TERMINAL_APK; });
 document.getElementById('year').textContent = new Date().getFullYear();
 </script>
 </body>
