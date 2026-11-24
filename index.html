@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MetroBus Digital: tu tarjeta de Metro y MetroBus en el teléfono</title>
+<meta name="description" content="Paga tu viaje acercando el celular a la terminal, recarga desde la app y revisa cada movimiento. Descarga MetroBus Digital para Android.">
+<meta name="theme-color" content="#0d131f">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0d131f;
+  --surface: #121927;
+  --line: #1a2436;
+  --green: #00d084;
+  --green-ink: #04210f;
+  --text: #e2e8f0;
+  --muted: #8c9ba9;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; margin: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Archivo', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--green); outline-offset: 3px; border-radius: 6px; }
+.wrap { width: min(1080px, 100% - 40px); margin-inline: auto; }
+
+/* Cabecera */
+header { padding: 18px 0; border-bottom: 1px solid var(--line); }
+header .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 17px; text-decoration: none; }
+.brand-mark { width: 30px; height: 30px; border-radius: 9px; background: var(--green); display: grid; place-items: center; }
+.brand-mark svg { width: 18px; height: 18px; stroke: var(--green-ink); }
+header nav a { font-size: 14px; font-weight: 500; color: var(--muted); text-decoration: none; }
+header nav a:hover { color: var(--text); }
+
+/* Botones */
+.btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 14px 24px; border-radius: 14px;
+  background: var(--green); color: var(--green-ink);
+  font: 700 16px/1 'Archivo', system-ui, sans-serif; text-decoration: none;
+  transition: transform .15s ease, filter .15s ease;
+}
+.btn:hover { filter: brightness(1.08); transform: translateY(-1px); }
+.btn svg { width: 20px; height: 20px; }
+.btn-quiet { background: transparent; color: var(--text); border: 1px solid var(--line); }
+.btn-quiet:hover { border-color: var(--green); filter: none; }
+
+/* Portada */
+.hero { padding: 56px 0 72px; display: grid; gap: 48px; align-items: center; }
+.hero h1 { font-size: clamp(36px, 7vw, 60px); line-height: 1.04; font-weight: 800; letter-spacing: -0.025em; max-width: 14ch; }
+.hero p.lead { margin-top: 20px; font-size: 18px; color: var(--muted); max-width: 46ch; }
+.hero-actions { margin-top: 32px; display: flex; flex-wrap: wrap; gap: 12px; }
+.hero small { display: block; margin-top: 16px; color: var(--muted); font-size: 14px; }
+
+/* Teléfono ilustrativo */
+.phone-wrap { display: grid; place-items: center; }
+.phone {
+  width: 270px; padding: 22px 18px 18px; border-radius: 38px;
+  background: var(--surface); border: 1px solid var(--line);
+  box-shadow: 0 30px 60px rgba(0,0,0,.45);
+}
+.phone-title { font-size: 12px; color: var(--muted); text-align: center; font-weight: 500; }
+.balance { margin-top: 18px; }
+.balance span { font-size: 12px; color: var(--muted); }
+.balance strong { display: block; font-size: 34px; font-weight: 800; letter-spacing: -0.02em; }
+.vcard { margin-top: 14px; padding: 14px; border-radius: 16px; background: linear-gradient(135deg, #0f2a3a, #0b3d36); border: 1px solid var(--line); }
+.vcard small { display: block; font-size: 11px; color: var(--muted); }
+.vcard b { display: block; margin-top: 18px; font-size: 16px; letter-spacing: .06em; }
+.pay { position: relative; height: 130px; display: grid; place-items: center; margin-top: 6px; }
+.pay-core { width: 54px; height: 54px; border-radius: 50%; background: var(--green); display: grid; place-items: center; position: relative; z-index: 1; }
+.pay-core svg { width: 26px; height: 26px; stroke: var(--green-ink); }
+.pay i { position: absolute; width: 54px; height: 54px; border-radius: 50%; border: 2px solid var(--green); opacity: 0; animation: ring 2.8s ease-out infinite; }
+.pay i:nth-child(2) { animation-delay: .9s; }
+.pay i:nth-child(3) { animation-delay: 1.8s; }
+@keyframes ring { from { transform: scale(1); opacity: .6; } to { transform: scale(2.6); opacity: 0; } }
+.tx { list-style: none; padding: 0; border-top: 1px solid var(--line); }
+.tx li { display: flex; justify-content: space-between; padding: 10px 0; font-size: 13px; border-bottom: 1px solid var(--line); }
+.tx li:last-child { border-bottom: 0; padding-bottom: 0; }
+.tx b { font-weight: 700; }
+.tx .in { color: var(--green); }
+
+/* Secciones */
+section { padding: 72px 0; border-top: 1px solid var(--line); }
+section h2 { font-size: clamp(26px, 4vw, 38px); line-height: 1.1; font-weight: 800; letter-spacing: -0.02em; max-width: 20ch; }
+section .intro { margin-top: 14px; color: var(--muted); max-width: 52ch; }
+
+/* Ruta: paradas del viaje */
+.route { list-style: none; padding: 0; margin-top: 44px; position: relative; display: grid; gap: 34px; }
+.route::before { content: ""; position: absolute; left: 13px; top: 8px; bottom: 8px; width: 4px; border-radius: 2px; background: var(--green); }
+.route li { position: relative; padding-left: 58px; }
+.route li::before {
+  content: ""; position: absolute; left: 4px; top: 4px; width: 22px; height: 22px;
+  border-radius: 50%; background: var(--bg); border: 4px solid var(--green);
+}
+.route h3 { font-size: 20px; font-weight: 700; }
+.route p { margin-top: 4px; color: var(--muted); max-width: 52ch; }
+
+/* Lista de ventajas */
+.perks { margin-top: 36px; display: grid; }
+.perk { display: grid; gap: 6px; padding: 22px 0; border-top: 1px solid var(--line); }
+.perk:last-child { border-bottom: 1px solid var(--line); }
+.perk h3 { font-size: 18px; font-weight: 700; }
+.perk p { color: var(--muted); max-width: 60ch; }
+
+/* Terminal */
+.terminal { display: grid; gap: 28px; align-items: center; }
+.terminal-box { padding: 26px; border-radius: 20px; background: var(--surface); border: 1px solid var(--line); }
+.terminal-box h3 { font-size: 20px; font-weight: 700; }
+.terminal-box p { margin-top: 8px; color: var(--muted); }
+.terminal-box .btn { margin-top: 20px; }
+
+/* Descarga */
+.download { background: var(--surface); }
+.download .wrap { display: grid; gap: 36px; }
+.steps { padding-left: 22px; display: grid; gap: 10px; color: var(--muted); }
+.steps li::marker { color: var(--green); font-weight: 700; }
+.steps b { color: var(--text); font-weight: 500; }
+
+footer { padding: 28px 0 40px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; }
+
+@media (min-width: 860px) {
+  .hero { grid-template-columns: 1.1fr .9fr; padding: 88px 0 104px; }
+  .terminal { grid-template-columns: 1fr 1fr; }
+  .download .wrap { grid-template-columns: 1fr 1fr; align-items: center; }
+  .perks { grid-template-columns: 1fr 1fr; column-gap: 48px; }
+  .perk:nth-last-child(2) { border-bottom: 1px solid var(--line); }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .pay i { animation: none; opacity: .35; }
+  .pay i:nth-child(2) { transform: scale(1.7); }
+  .pay i:nth-child(3) { transform: scale(2.4); }
+  .btn { transition: none; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <a class="brand" href="#inicio" aria-label="MetroBus Digital, inicio">
+      <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="14" rx="3"/><path d="M7 21l2-3M17 21l-2-3M3 11h18"/></svg></span>
+      MetroBus Digital
+    </a>
+    <nav><a href="#descarga" target="_blank">Descargar</a></nav>
+  </div>
+</header>
+
+<main id="inicio">
+  <div class="wrap hero">
+    <div>
+      <h1>Tu tarjeta de Metro y MetroBus, en el teléfono</h1>
+      <p class="lead">Paga tu viaje acercando el celular a la terminal, recarga desde la app y revisa cada movimiento de tu cuenta.</p>
+      <div class="hero-actions">
+        <a class="btn" href="#" data-apk="app" download>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0l-4.5-4.5M12 15l4.5-4.5M4 20h16"/></svg>
+          Descargar para Android
+        </a>
+        <a class="btn btn-quiet" href="#viaje">Ver cómo funciona</a>
+      </div>
+      <small>Instalación directa con archivo APK, sin tienda de aplicaciones.</small>
+    </div>
+
+    <div class="phone-wrap">
+      <div class="phone" aria-hidden="true">
+        <div class="phone-title">Tarjeta Metro Bus Digital</div>
+        <div class="balance"><span>Saldo disponible</span><strong>B/. 12.50</strong></div>
+        <div class="vcard"><small>MetroBus + Metro</small><b>MBD-8123456</b></div>
+        <div class="pay">
+          <i></i><i></i><i></i>
+          <div class="pay-core"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5a9 9 0 0 1 0-1M8.5 15a5.5 5.5 0 0 0 0-6M12 17.5a10 10 0 0 0 0-11M15.5 20a14 14 0 0 0 0-16"/></svg></div>
+        </div>
+        <ul class="tx">
+          <li><span>Viaje - Metro</span><b>-B/. 0.35</b></li>
+          <li><span>Recarga de saldo</span><b class="in">+B/. 10.00</b></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <section id="viaje">
+    <div class="wrap">
+      <h2>Tu viaje, parada por parada</h2>
+      <p class="intro">Desde crear la cuenta hasta revisar tus viajes, todo se hace desde el teléfono.</p>
+      <ol class="route">
+        <li><h3>Crea tu cuenta</h3><p>Regístrate con tu cédula y tu correo. Tu tarjeta queda asociada a tu cédula.</p></li>
+        <li><h3>Compra o registra tu tarjeta</h3><p>Compra una tarjeta digital o pasa tu tarjeta física a la app: conservas tu saldo.</p></li>
+        <li><h3>Recarga</h3><p>Desde B/. 1.00 hasta B/. 50.00 por recarga, pagando con Yappy.</p></li>
+        <li><h3>Paga acercando el teléfono</h3><p>Toca la terminal y el viaje se descuenta al instante.</p></li>
+        <li><h3>Revisa tu historial</h3><p>Recargas y viajes ordenados por día, con filtros para encontrar lo que buscas.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>Hecha para viajar sin sorpresas</h2>
+      <div class="perks">
+        <div class="perk"><h3>Saldo siempre a la vista</h3><p>Abre la app y ve cuánto tienes y cuál fue tu último movimiento.</p></div>
+        <div class="perk"><h3>Sin cobros dobles</h3><p>Si se corta la señal en medio de un pago, intentarlo de nuevo no te cobra dos veces.</p></div>
+        <div class="perk"><h3>Tu cuenta protegida</h3><p>Tu sesión está cifrada y puedes cambiar tu contraseña cuando quieras.</p></div>
+        <div class="perk"><h3>Recupera tu acceso</h3><p>Si olvidas tu contraseña, te enviamos un enlace por correo para crear una nueva.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- <section>
+    <div class="wrap terminal">
+      <div>
+        <h2>También hay terminal validadora</h2>
+        <p class="intro">La terminal es la que lee el teléfono del pasajero y cobra el viaje, para Metro, MetroBus y la Terminal de Albrook.</p>
+      </div>
+      <div class="terminal-box">
+        <h3>Terminal para operadores</h3>
+        <p>Instálala en el dispositivo que se usará como validador en la estación o en el bus.</p>
+        <a class="btn btn-quiet" href="#" data-apk="terminal">Descargar terminal</a>
+      </div>
+    </div>
+  </section> -->
+
+  <section class="download" id="descarga">
+    <div class="wrap">
+      <div>
+        <h2>Instala MetroBus Digital</h2>
+        <p class="intro">Disponible para teléfonos Android con NFC.</p>
+        <p style="margin-top:28px"><a class="btn" href="#" data-apk="app" download target="_blank">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0l-4.5-4.5M12 15l4.5-4.5M4 20h16"/></svg>
+          Descargar para Android
+        </a></p>
+      </div>
+      <ol class="steps">
+        <li><b>Descarga el archivo APK</b> con el botón de esta página.</li>
+        <li><b>Ábrelo</b> y, si el teléfono lo pide, permite instalar apps desde este origen.</li>
+        <li><b>Abre la app</b>, crea tu cuenta y activa el NFC en los ajustes del teléfono.</li>
+      </ol>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">MetroBus Digital, proyecto universitario. <span id="year"></span></div>
+</footer>
+
+<script>
+// CAMBIA ESTOS DOS ENLACES por la dirección de tus archivos APK
+// (por ejemplo, el archivo junto a este index.html o un enlace de GitHub Releases)
+const APP_APK = 'https://github.com/Juanleonel03/Download-Metro-Bus-Digital-App/releases/tag/metro_bus_digital';
+//const TERMINAL_APK = 'metrodigital-terminal.apk';
+
+document.querySelectorAll('[data-apk="app"]').forEach(function (a) { a.href = APP_APK; });
+document.querySelectorAll('[data-apk="terminal"]').forEach(function (a) { a.href = TERMINAL_APK; });
+document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
