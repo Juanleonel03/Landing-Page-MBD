@@ -152,7 +152,7 @@ footer { padding: 28px 0 40px; border-top: 1px solid var(--line); color: var(--m
       <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="14" rx="3"/><path d="M7 21l2-3M17 21l-2-3M3 11h18"/></svg></span>
       MetroBus Digital
     </a>
-    <nav><a href="#descarga" target="_blank">Descargar</a></nav>
+    <nav><a href="#descarga">Descargar</a></nav>
   </div>
 </header>
 
@@ -254,10 +254,11 @@ footer { padding: 28px 0 40px; border-top: 1px solid var(--line); color: var(--m
 <script>
 // CAMBIA ESTOS DOS ENLACES por la dirección de tus archivos APK
 // (por ejemplo, el archivo junto a este index.html o un enlace de GitHub Releases)
-const APP_APK = 'https://github.com/Juanleonel03/Download-Metro-Bus-Digital-App/releases/tag/metro_bus_digital/Metro.Bus.Digital.apk';
+const APP_APK = 'https://github.com/Juanleonel03/Download-Metro-Bus-Digital-App/releases/download/metro_bus_digital/Metro.Bus.Digital.apk';
+
 document.querySelectorAll('[data-apk="app"]').forEach(a => {
-  a.href = APP_APK;
-  a.removeAttribute('download');
+    a.href = APP_APK;
+    a.removeAttribute('download');
 });
 
 //const TERMINAL_APK = 'metrodigital-terminal.apk';
